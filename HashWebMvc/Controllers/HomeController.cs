@@ -17,8 +17,8 @@ namespace HashWebMvc.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
-
+            ViewData["Message"] = "Hash é uma Plataforma Com objetivo de Propor as melhores funcionalidades Para sua Empresa ";
+            ViewData["Email"] = "mjx.junior@outlook.com";
             return View();
         }
 
