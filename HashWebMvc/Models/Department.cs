@@ -22,6 +22,15 @@ namespace HashWebMvc.Models.ViewModels
 
             Id = id;
             Name = name;
+
+        }
+        public void AddSeller(Seller seller)
+        {
+            Sellers.Add(seller);
+        }
+        public double TotalSales(DateTime initial, DateTime final)
+        {
+            return Sellers.Sum(seller => seller.TotalSales(initial, final));
         }
     }
 

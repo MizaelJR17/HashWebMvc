@@ -9,11 +9,14 @@ namespace HashWebMvc.Models
 {
     public class HashWebMvcContext : DbContext
     {
-        public HashWebMvcContext (DbContextOptions<HashWebMvcContext> options)
+        public HashWebMvcContext(DbContextOptions<HashWebMvcContext> options)
             : base(options)
         {
         }
 
-        public DbSet<HashWebMvc.Models.ViewModels.Department> Department { get; set; }
+        public DbSet<Department> Department { get; set; }
+        public DbSet<Seller> Seller { get; set; }
+        public DbSet<SalesRecord> SalesRecords { get; set; }
+
     }
 }
