@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using HashWebMvc.Models;
 using HashWebMvc.Data;
-
+using HashWebMvc.Services;
 namespace HashWebMvc
 {
     public class Startup
@@ -43,6 +43,7 @@ namespace HashWebMvc
 
 
             services.AddScoped<SeedingService>();
+            services.AddScoped<SellerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
