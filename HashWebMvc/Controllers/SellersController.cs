@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HashWebMvc.Services.Exceptios;
 
 namespace HashWebMvc.Controllers
 {
@@ -58,20 +59,20 @@ namespace HashWebMvc.Controllers
 
             return View(obj);
         }
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-        public IActionResult Delete (int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
         {
             _sellerService.Remove(id);
-            return RedirectToAction (nameof(Index));
-            
+            return RedirectToAction(nameof(Index));
+
         }
 
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
 
-        public IActionResult Details (int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -87,8 +88,50 @@ namespace HashWebMvc.Controllers
             return View(obj);
         }
 
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = _sellerService.FindById(id.Value);
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            List<Department> departments = _departmentService.FindAll();
+            SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Seller seller)
+        {
+            if (id != seller.Id)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                _sellerService.Upddate(seller);
+                return RedirectToAction(nameof(Index));
 
 
+
+
+            } catch (DllNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (DbConcurrencyException)
+            {
+                return BadRequest();
+            }
+            }
 
     }
 }
