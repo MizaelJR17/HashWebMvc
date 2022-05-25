@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HashWebMvc.Services.Exceptios;
+using System.Diagnostics;
 
 namespace HashWebMvc.Controllers
 {
@@ -48,13 +49,13 @@ namespace HashWebMvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = " Id not provided" });
             }
 
             var obj = _sellerService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = " Id not Found" });
             }
 
             return View(obj);
@@ -76,13 +77,13 @@ namespace HashWebMvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = " Id not provided" });
             }
 
             var obj = _sellerService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = " Id not provided" });
             }
 
             return View(obj);
@@ -92,14 +93,14 @@ namespace HashWebMvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = " Id not provided" });
             }
 
             var obj = _sellerService.FindById(id.Value);
 
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = " Id not provided" });
             }
 
             List<Department> departments = _departmentService.FindAll();
@@ -113,7 +114,7 @@ namespace HashWebMvc.Controllers
         {
             if (id != seller.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = " Id mismatch" });
             }
             try
             {
@@ -123,15 +124,26 @@ namespace HashWebMvc.Controllers
 
 
 
-            } catch (DllNotFoundException)
+            }
+            catch (ApplicationException e )
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = e.Message });
             }
-            catch (DbConcurrencyException)
-            {
-                return BadRequest();
-            }
-            }
+            
+        }
 
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+
+            };
+
+            return View(viewModel);
+
+        }
     }
 }
